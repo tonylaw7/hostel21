@@ -7,7 +7,7 @@ public class Bed {
 	private int id;
 	private float price;
 	private int roomNum;
-	private DateFormat date;
+	//private DateFormat date;
 	private boolean isAvailable;
 	
 	
@@ -36,12 +36,13 @@ public class Bed {
 	public void setAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	public DateFormat getDate() {
-		return date;
-	}
-	public void setDate(DateFormat date) {
-		this.date = date;
-	}
+	
+	//public DateFormat getDate() {
+	//	return date;
+	//}
+	//public void setDate(DateFormat date) {
+	//	this.date = date;
+	//}
 	
 	
 	
