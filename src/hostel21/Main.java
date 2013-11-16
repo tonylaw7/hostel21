@@ -1,3 +1,4 @@
+package hostel21;
 import java.util.*;
 import java.io.*;
 
@@ -146,11 +147,6 @@ public class Main {
 			return false;
 		}
 		
-		if(args.length != 9) {
-			System.out.println("Wrong arguments and/or null values! Please try again");
-			return false;
-		}
-		
 		for(int i=1; i<args.length; i+=2) {
 			if(args[i].equals("--city") ||
 			   args[i].equals("--start_date") ||
@@ -162,6 +158,12 @@ public class Main {
 				System.out.println("Wrong search arguments: --city, --start_date, --end_date, or --beds is missing!");
 				return false;
 			}
+		}
+		
+		if(args.length % 2 ==0)
+		{
+			System.out.println("Some arguments are not assigned values! Please try again.");
+			return false;
 		}
 		
 		return true;
