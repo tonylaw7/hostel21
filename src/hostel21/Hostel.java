@@ -7,11 +7,11 @@ public class Hostel {
 
 	private int id;
 	private String name;
-	private String address;
+	private Address address;
 	private Contact contact;
 	
 	private int numOfRooms;
-	private ArrayList<Bed> Beds;
+	private ArrayList<Date> dates;
 	
 	//need verifications on what date format to be used
 	private DateFormat checkInTime;
@@ -20,16 +20,16 @@ public class Hostel {
 	private boolean isSmockingAllowed;
 	private boolean isAlcoholAllowed;
 	
-	public Hostel(int id,String address, int numOfRooms){
+	public Hostel(int id,Address address, int numOfRooms){
 		this.id = id;
 		this.address = address;
 		this.numOfRooms = numOfRooms;
 		
 	}
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 	public int getId() {
@@ -44,12 +44,7 @@ public class Hostel {
 	public void setNumOfRooms(int numOfRooms) {
 		this.numOfRooms = numOfRooms;
 	}
-	public ArrayList<Bed> getBeds() {
-		return Beds;
-	}
-	public void setRooms(ArrayList<Bed> beds) {
-		Beds = beds;
-	}
+
 	public String getName() {
 		return name;
 	}
@@ -85,6 +80,12 @@ public class Hostel {
 	}
 	public void setAlcoholAllowed(boolean isAlcoholAllowed) {
 		this.isAlcoholAllowed = isAlcoholAllowed;
+	}
+	public ArrayList<Date> getDates() {
+		return dates;
+	}
+	public void setDates(ArrayList<Date> dates) {
+		this.dates = dates;
 	}
 	
 	
