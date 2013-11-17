@@ -71,8 +71,18 @@ public class Main {
 				System.out.println("Hostel #" + (i+1) + ", " + hostels.get(i).getName());
 				
 				ArrayList<Date> dates = hostels.get(i).GetHostelDatesByRange(start_date, end_date);
+				
+				// test
+				if(dates.size() != end_date-start_date)
+				{
+					System.out.println("Error! 3");
+					return;
+				}
+				
 				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
 				GetSearchResults(bedsCombinations, dates, 0, "");
+				
+				System.out.println();
 			}
 		}
 	}
@@ -87,14 +97,17 @@ public class Main {
 	}
 	static void GetSearchResults(ArrayList<ArrayList<String>> bedsCombinations, ArrayList<Date> dates, int index, String searchStr)
 	{
-		GetBedsCombinations(dates, 0, "", bedsCombinations.get(index));
+		ArrayList<String> beds = bedsCombinations.get(index); 
+		beds = new ArrayList<String>();
+		GetBedsCombinations(dates, 0, "", beds);
 		for(String bed : bedsCombinations.get(index))
 		{
+			searchStr = (searchStr != "") ? ";"+bed : bed;
 			if(index < bedsCombinations.size()-1) // if more combinations are available
 			{
-				SetBedAvailability(bed, false);
-				GetSearchResults(bedsCombinations, dates, index+1, searchStr+bed);
-				SetBedAvailability(bed, true);
+				SetBedAvailability(bed, dates, false);
+				GetSearchResults(bedsCombinations, dates, index+1, searchStr);
+				SetBedAvailability(bed, dates, true);
 			}
 			else
 				AddNewSearchResult(searchStr);
@@ -102,12 +115,51 @@ public class Main {
 	}
 	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
 	{
-		if(beds_num.length() == dates.size())
+		String[] beds_nums = beds_num.split(",");
+		if(beds_nums.length == dates.size()){
+			//beds_num = beds_num.substring(0, beds_num.length()-1);
 			results.add(beds_num);
+		}
 		else
 			for(Bed bed : dates.get(index).getBeds())
 				if(bed.isAvailable())
+				{
+					if(beds_num != "") beds_num += ",";
 					GetBedsCombinations(dates, index+1, beds_num+bed.getNum(), results);
+				}
+	}
+	
+	static void SetBedAvailability(String bed, ArrayList<Date> dates, boolean isAvailable)
+	{
+		String[] beds = bed.split(",");
+		
+		// test
+		if(beds.length != dates.size())
+		{
+			System.out.println("Error! 1");
+			return;
+		}
+		
+		for(int i=0;i<dates.size();i++)
+		{
+			Bed b = GetBedByNumber(dates.get(i), Integer.parseInt(beds[i]));
+			
+			// test
+			if(b == null) {
+				System.out.println("Error! 2");
+				return;
+			}
+			
+			b.setAvailable(isAvailable);
+		}
+	}
+	
+	static Bed GetBedByNumber(Date date, int number)
+	{
+		for(Bed bed : date.getBeds())
+			if(bed.getNum() == number)
+				return bed;
+		return null;
 	}
 	
 	// Commands excution
