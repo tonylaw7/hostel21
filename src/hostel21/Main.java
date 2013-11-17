@@ -3,15 +3,22 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-
+	
+	// Static fields
+	static ArrayList<Hostel> hostel21;
+	
+	// Main program
 	public static void main(String[] args) {
 		LoadData();
 		RunApp();
 		SaveData();
 	}
 	
+	// Load/Save data
 	private static void LoadData() { }
+	private static void SaveData() { }
 	
+	// Main app method
 	private static void RunApp()
 	{
 		String command = "";
@@ -45,6 +52,63 @@ public class Main {
 		}
 	}
 	
+	// Search methods
+	static void Search(String city, long start_date, long end_date, int beds)
+	{
+		if(beds == -1)
+		{
+			
+		}
+		else
+		{
+			ArrayList<Hostel> hostels;
+			hostels = (city != "") ? GetHostelsByCity(city):hostel21;
+			
+			for(int i=0; i<hostels.size(); i++)
+			{
+				System.out.println("Hostel #" + (i+1) + ", " + hostels.get(i).getName());
+				
+				ArrayList<Date> dates = hostels.get(i).GetHostelDatesByRange(start_date, end_date);
+				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
+				GetSearchResults(bedsCombinations, dates, 0, "");
+			}
+		}
+	}
+	
+	static ArrayList<Hostel> GetHostelsByCity(String city)
+	{
+		ArrayList<Hostel> hostels = new ArrayList<Hostel>();
+		for(Hostel h : hostel21)
+			if(h.getAddress().getCity().equals(city))
+				hostels.add(h);
+		return hostels;
+	}
+	static void GetSearchResults(ArrayList<ArrayList<String>> bedsCombinations, ArrayList<Date> dates, int index, String searchStr)
+	{
+		GetBedsCombinations(dates, 0, "", bedsCombinations.get(index));
+		for(String bed : bedsCombinations.get(index))
+		{
+			if(index < bedsCombinations.size()-1) // if more combinations are available
+			{
+				SetBedAvailability(bed, false);
+				GetSearchResults(bedsCombinations, dates, index+1, searchStr+bed);
+				SetBedAvailability(bed, true);
+			}
+			else
+				AddNewSearchResult(searchStr);
+		}
+	}
+	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
+	{
+		if(beds_num.length() == dates.size())
+			results.add(beds_num);
+		else
+			for(Bed bed : dates.get(index).getBeds())
+				if(bed.isAvailable())
+					GetBedsCombinations(dates, index+1, beds_num+bed.getNum(), results);
+	}
+	
+	// Commands excution
 	private static void ExcuteAdminCommand(String[] args)
 	{
 		if(args.length < 3) 
@@ -140,6 +204,8 @@ public class Main {
 		
 		}
 	}
+	
+	// Command args testing 
 	private static boolean TestSearchArgs(String[] args)
 	{
 		if(args.length > 9) {
@@ -168,8 +234,6 @@ public class Main {
 		
 		return true;
 	}
-	
-
 	private static boolean TestBookAddArgs(String[] args)
 	{
 		if(args.length > 6) {
@@ -194,62 +258,6 @@ public class Main {
 		}
 		return true;
 	}
-	
-	private static boolean TestBookCancelViewArgs(String[] args)
-	{
-		if(args.length > 4)
-		{
-			System.out.println("Too many arguments! Please try again");
-			return false;
-		}
-		if(!args[2].equals("--book_id"))
-		{
-			System.out.println("Argument '--book_id' is missing!");
-			return false;
-		}
-		if(args.length != 4)
-		{
-			System.out.println("Argument '--book_id' doesn't have a value! Please try again.");
-			return false;
-		}
-		return true;
-	}
-
-	private static boolean TestUserAddArgs(String[] args)
-	{
-		if(args.length == 8 || args.length == 16)
-		{
-			for(int i=2; i<args.length; i+=2){
-				if(args[i].equals("--first_name") ||
-				   args[i].equals("--last_name") ||
-				   args[i].equals("--email")) 
-					continue;
-				else
-				{
-					System.out.println("Wrong 'user add' arguments: --first_name, --last_name, and --email are required!");
-					return false;
-				}
-			}
-			for(int i=8; i<args.length; i+=2) {
-				if(args[i].equals("--cc_number") ||
-				   args[i].equals("--expiration_date") ||
-				   args[i].equals("--security_code") ||
-				   args[1].equals("--phone")) 
-					continue;
-				else
-				{
-					System.out.println("Wrong 'user add' optional arguments: "
-							+ "--cc_number, --expiration_date, --security_code, or --phone is missing!");
-					return false;
-				}
-			}
-			return true;
-		}
-		else
-			System.out.println("Wrong 'user add' arguments! Please try again.");
-		return false;
-	}
-	
 	private static boolean TestUserChangeArgs(String[] args)
 	{
 		if(args.length > 18) {
@@ -307,7 +315,59 @@ public class Main {
 		}
 		return true;
 	}
-
+	private static boolean TestBookCancelViewArgs(String[] args)
+	{
+		if(args.length > 4)
+		{
+			System.out.println("Too many arguments! Please try again");
+			return false;
+		}
+		if(!args[2].equals("--book_id"))
+		{
+			System.out.println("Argument '--book_id' is missing!");
+			return false;
+		}
+		if(args.length != 4)
+		{
+			System.out.println("Argument '--book_id' doesn't have a value! Please try again.");
+			return false;
+		}
+		return true;
+	}
+	private static boolean TestUserAddArgs(String[] args)
+	{
+		if(args.length == 8 || args.length == 16)
+		{
+			for(int i=2; i<args.length; i+=2){
+				if(args[i].equals("--first_name") ||
+				   args[i].equals("--last_name") ||
+				   args[i].equals("--email")) 
+					continue;
+				else
+				{
+					System.out.println("Wrong 'user add' arguments: --first_name, --last_name, and --email are required!");
+					return false;
+				}
+			}
+			for(int i=8; i<args.length; i+=2) {
+				if(args[i].equals("--cc_number") ||
+				   args[i].equals("--expiration_date") ||
+				   args[i].equals("--security_code") ||
+				   args[1].equals("--phone")) 
+					continue;
+				else
+				{
+					System.out.println("Wrong 'user add' optional arguments: "
+							+ "--cc_number, --expiration_date, --security_code, or --phone is missing!");
+					return false;
+				}
+			}
+			return true;
+		}
+		else
+			System.out.println("Wrong 'user add' arguments! Please try again.");
+		return false;
+	}
 	private static boolean TestAdminOccupancyArgs(String[] args)
 	{
 		if(args.length > 6) {
@@ -332,5 +392,5 @@ public class Main {
 		}
 		return true;
 	}
-	private static void SaveData() { }
+
 }

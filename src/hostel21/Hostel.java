@@ -88,6 +88,14 @@ public class Hostel {
 		this.dates = dates;
 	}
 	
-	
+	// methods
+	ArrayList<Date> GetHostelDatesByRange(long start_date, long end_date)
+	{
+		ArrayList<Date> hostel_dates = new ArrayList<Date>();
+		for(Date d : dates)
+			if(d.getDate() >= start_date && d.getDate() < end_date)
+				hostel_dates.add(d);
+		return hostel_dates;
+	}
 	
 }
