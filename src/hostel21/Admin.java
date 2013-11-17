@@ -1,5 +1,9 @@
 package hostel21;
 
-public class Admin {
+import java.util.ArrayList;
 
-}
+public  class Admin {
+
+
+	}
+

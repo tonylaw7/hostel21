@@ -1,22 +1,31 @@
 package hostel21;
 
+import java.text.DateFormat;
+
 public class Customer {
 	
 	private static int id;
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String ccNumber;
+	private String expirationDate;
+	private String securityCode;	
+	private String phone;
+	private DateFormat creatingDate;
+	
 	private String facebook;
 	private String twitter;
-	private String phone;
 	
-	public Customer(String first, String last, String email, String facebook, String twiiter, String phone){
+	
+	public Customer(String first, String last, String email, String ccNumber, String expirationDate, String securityCode, String phone){
 				
 		this.firstName = first;
 		this.lastName = last;
 		this.email = email;
-		this.facebook = facebook;
-		this.twitter = twiiter;
+		this.setCcNumber(ccNumber);
+		this.setExpirationDate(expirationDate);
+		this.setSecurityCode(securityCode);
 		this.phone = phone;
 		
 		id++;
@@ -60,6 +69,38 @@ public class Customer {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public DateFormat getCreatingDate() {
+		return creatingDate;
+	}
+
+	public void setCreatingDate(DateFormat creatingDate) {
+		this.creatingDate = creatingDate;
+	}
+
+	public String getCcNumber() {
+		return ccNumber;
+	}
+
+	public void setCcNumber(String ccNumber) {
+		this.ccNumber = ccNumber;
+	}
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public String getSecurityCode() {
+		return securityCode;
+	}
+
+	public void setSecurityCode(String securityCode) {
+		this.securityCode = securityCode;
 	}
 	
 }
