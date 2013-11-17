@@ -3,9 +3,11 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+
 	
 	// Static fields
 	static ArrayList<Hostel> hostel21;
+	static ArrayList<Customer> customers;
 	
 	// Main program
 	public static void main(String[] args) {
@@ -143,8 +145,8 @@ public class Main {
 			switch(args[1])
 			{
 			case "add":
-				if(TestUserAddArgs(args)) {
-					
+				if(TestUserAddArgs(args)) {					
+					AddNewCustomer(args);					
 				}
 				break;
 			case "change":
@@ -154,7 +156,7 @@ public class Main {
 				break;
 			case "view":
 				if(TestUserViewArgs(args)) {
-					
+					ViewCustomer(args[3]);
 				}
 				break;
 			default:
@@ -392,5 +394,43 @@ public class Main {
 		}
 		return true;
 	}
+	
+		
+	//scanning the args array to add customer's information
+	public static void AddNewCustomer(String[] args)
+	{
+		String fname = args[3];
+		String lname = args[5];
+		String email = args[7];
+		String cc_number="";
+		String expirationDate = "";
+		String securityCode = "";
+		String phone ="";
+		
+		for(int i=3; i<args.length; i+=2){
+			if(args[i].equals("--first_name")){fname = args[i];}
+			else if (args[i].equals("--last_name")) {lname = args[i];}
+			else if (args[i].equals("--email")) {email = args[i];}
+			else if (args[i].equals("--cc_number")) {cc_number = args[i];}
+			else if (args[i].equals("--expiration_date")){expirationDate = args[i];}
+			else if (args[i].equals("--security_code")){securityCode = args[i];}
+			else if (args[i].equals("--phone")){phone = args[i];}
+		}
+		
+		Customer newCustomer = new Customer(fname, lname, email, cc_number, expirationDate, securityCode, phone);		
+		customers.add(newCustomer);
+		
+	}
+	
+	//view customers information by passing his/her ID through args
+	public static void ViewCustomer(String userID) {
+		for(Customer c : customers)
+		{
+			if (c.getId() == Integer.parseInt(userID)) {
+				System.out.println("user_id: " + userID);
+				System.out.println("Name: " + c.getFirstName() + " " + c.getLastName());
+				System.out.println("Email: " + c.getEmail());				
+			}
+		}
 
 }
