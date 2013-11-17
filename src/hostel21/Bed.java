@@ -4,7 +4,7 @@ import java.text.DateFormat;
 
 public class Bed {
 
-	private int num;
+	private int id;
 	private float price;
 	private int roomNum;
 	//private DateFormat date;
@@ -12,11 +12,11 @@ public class Bed {
 	
 	
 	
-	public int getNum() {
-		return num;
+	public int getId() {
+		return id;
 	}
-	public void setId(int num) {
-		this.num = num;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public float getPrice() {
 		return price;

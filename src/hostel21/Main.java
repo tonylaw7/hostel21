@@ -71,20 +71,8 @@ public class Main {
 				System.out.println("Hostel #" + (i+1) + ", " + hostels.get(i).getName());
 				
 				ArrayList<Date> dates = hostels.get(i).GetHostelDatesByRange(start_date, end_date);
-				
-				// test
-				if(dates.size() != end_date-start_date)
-				{
-					System.out.println("Error! 3");
-					return;
-				}
-				
 				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
 				GetSearchResults(bedsCombinations, dates, 0, "");
-				
-				
-				
-				System.out.println();
 			}
 		}
 	}
@@ -99,71 +87,27 @@ public class Main {
 	}
 	static void GetSearchResults(ArrayList<ArrayList<String>> bedsCombinations, ArrayList<Date> dates, int index, String searchStr)
 	{
-		ArrayList<String> beds = bedsCombinations.get(index); 
-		beds = new ArrayList<String>();
-		GetBedsCombinations(dates, 0, "", beds);
+		GetBedsCombinations(dates, 0, "", bedsCombinations.get(index));
 		for(String bed : bedsCombinations.get(index))
 		{
-			String tmp = searchStr;
-			tmp = (searchStr != "") ? ";"+bed : bed;
 			if(index < bedsCombinations.size()-1) // if more combinations are available
 			{
-				SetBedAvailability(bed, dates, false);
-				GetSearchResults(bedsCombinations, dates, index+1, tmp);
-				SetBedAvailability(bed, dates, true);
+				SetBedAvailability(bed, false);
+				GetSearchResults(bedsCombinations, dates, index+1, searchStr+bed);
+				SetBedAvailability(bed, true);
 			}
 			else
-				AddNewSearchResult(tmp);
+				AddNewSearchResult(searchStr);
 		}
 	}
 	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
 	{
-		String[] beds_nums = beds_num.split(",");
-		if(beds_nums.length == dates.size()){
-			//beds_num = beds_num.substring(0, beds_num.length()-1);
+		if(beds_num.length() == dates.size())
 			results.add(beds_num);
-		}
 		else
 			for(Bed bed : dates.get(index).getBeds())
 				if(bed.isAvailable())
-				{
-					String tmp = beds_num;
-					if(beds_num != "") tmp += ",";
-					GetBedsCombinations(dates, index+1, tmp+bed.getRoomNum()+"-"+bed.getNum(), results);
-				}
-	}
-	
-	static void SetBedAvailability(String bed, ArrayList<Date> dates, boolean isAvailable)
-	{
-		String[] beds = bed.split(",");
-		
-		// test
-		if(beds.length != dates.size())
-		{
-			System.out.println("Error! 1");
-			return;
-		}
-		
-		for(int i=0;i<dates.size();i++)
-		{
-			Bed b = GetBedByNumber(dates.get(i), Integer.parseInt(beds[i]));
-			
-			// test
-			if(b == null) {
-				System.out.println("Error! 2");
-				return;
-			}
-			
-			b.setAvailable(isAvailable);
-		}
-	}
-	
-	static Bed GetBedByNumber(Date date, int number)
-	{
-		for(Bed bed : date.getBeds())
-			if(bed.getNum() == number)
-				return bed;
-		return null;
+					GetBedsCombinations(dates, index+1, beds_num+bed.getNum(), results);
 	}
 	
 	// Commands excution
@@ -207,7 +151,7 @@ public class Main {
 				break;
 			case "change":
 				if(TestUserChangeArgs(args)) {
-					
+					ChangeCustomer(args);
 				}
 				break;
 			case "view":
@@ -455,9 +399,9 @@ public class Main {
 	//scanning the args array to add customer's information
 	public static void AddNewCustomer(String[] args)
 	{
-		String fname = args[3];
-		String lname = args[5];
-		String email = args[7];
+		String fname = "";
+		String lname = "";
+		String email = "";
 		String cc_number="";
 		String expirationDate = "";
 		String securityCode = "";
@@ -478,15 +422,42 @@ public class Main {
 		
 	}
 	
-	//view customers information by passing his/her ID through args
-	public static void ViewCustomer(String userID) {
-		for(Customer c : customers)
-		{
+	public static void ChangeCustomer(String[] args)
+	{
+		String userID = args[3];		
+		Customer existingCustomer = GetCustomer(userID);
+		
+		//sample command
+		//$ h21 user change --user_id [ --first_name --last_name --email [ --cc_number --expiration_date --security_code --phone ]]
+		//index should start at 4
+		for(int i=4; i<args.length; i+=2){
+			if(args[i].equals("--first_name")){existingCustomer.setFirstName(args[i]);}
+			else if (args[i].equals("--last_name")) {existingCustomer.setLastName(args[i]);}
+			else if (args[i].equals("--email")) {existingCustomer.setEmail(args[i]);}
+			else if (args[i].equals("--cc_number")) {existingCustomer.setCcNumber(args[i]);}
+			else if (args[i].equals("--expiration_date")){existingCustomer.setExpirationDate(args[i]);}
+			else if (args[i].equals("--security_code")){existingCustomer.setSecurityCode(args[i]);}
+			else if (args[i].equals("--phone")){existingCustomer.setPhone(args[i]);}
+		}										
+	}
+	
+	//getting customer by his/her userID
+	public static Customer GetCustomer(String userID ) {
+		for(Customer c : customers) {
 			if (c.getId() == Integer.parseInt(userID)) {
-				System.out.println("user_id: " + userID);
-				System.out.println("Name: " + c.getFirstName() + " " + c.getLastName());
-				System.out.println("Email: " + c.getEmail());				
-			}
+				return c;
+			}			
 		}
+		return null;
+	}	
+	
+	//view customer information
+	public static void ViewCustomer(String userID) {
+		Customer tempCustomer  = GetCustomer(userID);
+				System.out.println("user_id: " + userID);
+				System.out.println("Name: " + tempCustomer.getFirstName() + " " + tempCustomer.getLastName());
+				System.out.println("Email: " + tempCustomer.getEmail());				
+					
+	}
 
 }
