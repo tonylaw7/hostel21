@@ -8,7 +8,6 @@ public class Main {
 	// Static fields
 	static ArrayList<Hostel> hostel21;
 	static ArrayList<Customer> customers;
-	static ArrayList<String> results;
 	
 	// Main program
 	public static void main(String[] args) {
@@ -58,7 +57,6 @@ public class Main {
 	// Search methods
 	static void Search(String city, long start_date, long end_date, int beds)
 	{
-		results.clear();
 		if(beds == -1)
 		{
 			
@@ -84,8 +82,6 @@ public class Main {
 				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
 				GetSearchResults(bedsCombinations, dates, 0, "");
 				
-				
-				
 				System.out.println();
 			}
 		}
@@ -106,16 +102,15 @@ public class Main {
 		GetBedsCombinations(dates, 0, "", beds);
 		for(String bed : bedsCombinations.get(index))
 		{
-			String tmp = searchStr;
-			tmp = (searchStr != "") ? ";"+bed : bed;
+			searchStr = (searchStr != "") ? ";"+bed : bed;
 			if(index < bedsCombinations.size()-1) // if more combinations are available
 			{
 				SetBedAvailability(bed, dates, false);
-				GetSearchResults(bedsCombinations, dates, index+1, tmp);
+				GetSearchResults(bedsCombinations, dates, index+1, searchStr);
 				SetBedAvailability(bed, dates, true);
 			}
 			else
-				results.add(tmp);
+				AddNewSearchResult(searchStr);
 		}
 	}
 	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
@@ -129,9 +124,8 @@ public class Main {
 			for(Bed bed : dates.get(index).getBeds())
 				if(bed.isAvailable())
 				{
-					String tmp = beds_num;
-					if(beds_num != "") tmp += ",";
-					GetBedsCombinations(dates, index+1, tmp+bed.getRoomNum()+"-"+bed.getNum(), results);
+					if(beds_num != "") beds_num += ",";
+					GetBedsCombinations(dates, index+1, beds_num+bed.getNum(), results);
 				}
 	}
 	
