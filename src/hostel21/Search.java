@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class Search {
 	
-	private int id;
-	private ArrayList<Date> searchDates;
+	private static int id;
+	
+	private SearchResult searchResult;
 	
 
 }
