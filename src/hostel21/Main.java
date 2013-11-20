@@ -8,6 +8,7 @@ public class Main {
 	// Static fields
 	static ArrayList<Hostel> hostel21;
 	static ArrayList<Customer> customers;
+	static ArrayList<String> results;
 	
 	// Main program
 	public static void main(String[] args) {
@@ -57,6 +58,7 @@ public class Main {
 	// Search methods
 	static void Search(String city, long start_date, long end_date, int beds)
 	{
+		results.clear();
 		if(beds == -1)
 		{
 			
@@ -97,7 +99,11 @@ public class Main {
 				SetBedAvailability(bed, true);
 			}
 			else
+<<<<<<< HEAD
 				AddNewSearchResult(searchStr);
+=======
+				results.add(tmp);
+>>>>>>> malaliwi2/master
 		}
 	}
 	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
