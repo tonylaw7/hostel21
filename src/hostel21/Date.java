@@ -21,6 +21,12 @@ public class Date {
 		this.beds = beds;
 	}
 	
-	
+	public Bed GetBedByNum(int roomNum, int bedNum)
+	{
+		for(Bed bed : beds)
+			if(bed.getRoomNum() == roomNum && bed.getNum() == bedNum)
+				return bed;
+		return null;
+	}
 
 }
