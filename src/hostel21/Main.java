@@ -8,7 +8,7 @@ public class Main {
 	// Static fields
 	static ArrayList<Hostel> hostel21;
 	static ArrayList<Customer> customers;
-	static ArrayList<String> results;
+	static ArrayList<String> results = new ArrayList<String>();
 	
 	// Main program
 	public static void main(String[] args) {
@@ -58,7 +58,6 @@ public class Main {
 	// Search methods
 	static void Search(String city, long start_date, long end_date, int beds)
 	{
-		results.clear();
 		if(beds == -1)
 		{
 			
@@ -75,6 +74,13 @@ public class Main {
 				ArrayList<Date> dates = hostels.get(i).GetHostelDatesByRange(start_date, end_date);
 				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
 				GetSearchResults(bedsCombinations, dates, 0, "");
+<<<<<<< HEAD
+=======
+				
+				Search.GenerateSearchIDs(results, hostels.get(i).getName(), dates, beds);
+				
+				System.out.println();
+>>>>>>> malaliwi2/master
 			}
 		}
 	}
@@ -454,6 +460,7 @@ public class Main {
 				return c;
 			}			
 		}
+<<<<<<< HEAD
 		return null;
 	}	
 	
@@ -464,6 +471,8 @@ public class Main {
 				System.out.println("Name: " + tempCustomer.getFirstName() + " " + tempCustomer.getLastName());
 				System.out.println("Email: " + tempCustomer.getEmail());				
 					
+=======
+>>>>>>> malaliwi2/master
 	}
 
 }

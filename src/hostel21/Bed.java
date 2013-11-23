@@ -10,7 +10,13 @@ public class Bed {
 	//private DateFormat date;
 	private boolean isAvailable;
 	
-	
+	public Bed(int num, int roomNum, float price, boolean isAvailable)
+	{
+		this.num = num;
+		this.roomNum = roomNum;
+		this.price = price;
+		this.isAvailable = isAvailable;
+	}
 	
 	public int getId() {
 		return id;
