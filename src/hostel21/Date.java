@@ -5,13 +5,22 @@ import java.util.ArrayList;
 
 public class Date {
 	
-	private DateFormat date;
+	private long date;
 	private ArrayList<Bed> beds;
 	
-	public DateFormat getDate() {
+	public Date() {
+		this.beds = new ArrayList<Bed>();
+	}
+	
+	public Date(long date) {
+		this.date = date;
+		this.beds = new ArrayList<Bed>();
+	}
+	
+	public long getDate() {
 		return date;
 	}
-	public void setDate(DateFormat date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 	public ArrayList<Bed> getBeds() {

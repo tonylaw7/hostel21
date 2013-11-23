@@ -5,10 +5,6 @@ import java.util.Hashtable;
 
 public class Search {
 	
-<<<<<<< HEAD
-	private int id;
-	private ArrayList<Date> searchDates;
-=======
 	private static int id=0;
 	private static Hashtable<Integer,SearchResult> searchResults = new Hashtable<Integer,SearchResult>(); 
 	
@@ -16,6 +12,7 @@ public class Search {
 	{
 		id++;
 		searchResults.put(id, sr);
+		PrintResults(id, sr);
 	}
 	
 	private static void PrintResults(int id, SearchResult sr)
@@ -24,6 +21,7 @@ public class Search {
 		line += id;
 		line += ", " + sr.GetTotalPrice();
 		line += ", rooms " + GetRoomNums(sr);
+		System.out.println(line);
 	}
 	
 	private static String GetRoomNums(SearchResult sr)
@@ -76,6 +74,5 @@ public class Search {
 		sr.SetTotalPrice(totalPrice);
 		return sr;
 	}
->>>>>>> malaliwi2/master
 	
 }

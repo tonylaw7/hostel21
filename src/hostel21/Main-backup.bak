@@ -1,23 +1,19 @@
 package hostel21;
 import java.util.*;
-
+import java.io.*;
 
 public class Main {
 
 	
 	// Static fields
-	static ArrayList<Hostel> hostel21 = new ArrayList<Hostel>();
+	static ArrayList<Hostel> hostel21;
 	static ArrayList<Customer> customers;
-	static ArrayList<String> results = new ArrayList<String>();
-	static ArrayList<Bed> bedResults = new ArrayList<Bed>();
 	
 	// Main program
 	public static void main(String[] args) {
-		ReadXML();
 		LoadData();
 		RunApp();
 		SaveData();
-		
 	}
 	
 	// Load/Save data
@@ -55,89 +51,30 @@ public class Main {
 					System.out.println(args[0] + " is not recognised as a command! Please try again.");
 			}
 			System.out.println();
-			
-		}		
+		}
 	}
 	
 	// Search methods
 	static void Search(String city, long start_date, long end_date, int beds)
 	{
-		ArrayList<Hostel> hostels;
-		hostels = (city != "") ? GetHostelsByCity(city):hostel21;
-		
 		if(beds == -1)
 		{
 			
 		}
 		else
-		{	
+		{
+			ArrayList<Hostel> hostels;
+			hostels = (city != "") ? GetHostelsByCity(city):hostel21;
+			
 			for(int i=0; i<hostels.size(); i++)
 			{
 				System.out.println("Hostel #" + (i+1) + ", " + hostels.get(i).getName());
 				
 				ArrayList<Date> dates = hostels.get(i).GetHostelDatesByRange(start_date, end_date);
-				
-				// test
-				if(dates.size() != end_date-start_date)
-				{
-					System.out.println("Error! 3");
-					return;
-				}
-				
-				if(SearchByPriority(dates, beds))
-				{
-					ArrayList<String> list = ConvertBedArrayListToStringArrayList(bedResults, dates.size(), beds);
-					Search.GenerateSearchIDs(list, hostels.get(i).getName(), dates, beds);
-				}
-				else
-				{
-					ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
-					GetSearchResults(bedsCombinations, dates, 0, "");
-				
-					Search.GenerateSearchIDs(results, hostels.get(i).getName(), dates, beds);
-				}
-				System.out.println();
+				ArrayList<ArrayList<String>> bedsCombinations = new ArrayList<ArrayList<String>>(beds);
+				GetSearchResults(bedsCombinations, dates, 0, "");
 			}
 		}
-	}
-	
-	static ArrayList<String> ConvertBedArrayListToStringArrayList(ArrayList<Bed> bedResults, int dateSize, int beds)
-	{
-		ArrayList<String> list = new ArrayList<String>();
-		String str = "";
-		for(Bed bed : bedResults)
-		{
-			String tmp = bed.getRoomNum() + "-" + bed.getNum();
-			for(int i=1;i<dateSize;i++)
-				tmp += "," + tmp;
-			str += (str=="") ? tmp : ";" + tmp;
-		}
-		list.add(str);
-		
-		return list;
-	}
-	
-	static boolean SearchByPriority(ArrayList<Date> dates, int beds)
-	{
-		int counter = 0;
-		for(Bed bed : dates.get(0).getBeds())
-			if(bed.isAvailable())
-				if(CheckBedAvailability(bed,dates))
-				{
-					bedResults.add(bed);
-					counter++;
-					if(counter == beds)
-						return true;
-				}
-		return false;
-	}
-	
-	static boolean CheckBedAvailability(Bed bed, ArrayList<Date> dates)
-	{
-		for(int i=1; i<dates.size(); i++)
-			if(!dates.get(i).GetBedByNum(bed.getRoomNum(), bed.getNum()).isAvailable())
-				return false;
-		return true;
 	}
 	
 	static ArrayList<Hostel> GetHostelsByCity(String city)
@@ -150,71 +87,27 @@ public class Main {
 	}
 	static void GetSearchResults(ArrayList<ArrayList<String>> bedsCombinations, ArrayList<Date> dates, int index, String searchStr)
 	{
-		ArrayList<String> beds = bedsCombinations.get(index); 
-		beds = new ArrayList<String>();
-		GetBedsCombinations(dates, 0, "", beds);
+		GetBedsCombinations(dates, 0, "", bedsCombinations.get(index));
 		for(String bed : bedsCombinations.get(index))
 		{
-			String tmp = searchStr;
-			tmp = (searchStr != "") ? ";"+bed : bed;
 			if(index < bedsCombinations.size()-1) // if more combinations are available
 			{
-				SetBedAvailability(bed, dates, false);
-				GetSearchResults(bedsCombinations, dates, index+1, tmp);
-				SetBedAvailability(bed, dates, true);
+				SetBedAvailability(bed, false);
+				GetSearchResults(bedsCombinations, dates, index+1, searchStr+bed);
+				SetBedAvailability(bed, true);
 			}
 			else
-				results.add(tmp);
+				AddNewSearchResult(searchStr);
 		}
 	}
 	static void GetBedsCombinations(ArrayList<Date> dates, int index, String beds_num, ArrayList<String> results)
 	{
-		String[] beds_nums = beds_num.split(",");
-		if(beds_nums.length == dates.size()){
-			//beds_num = beds_num.substring(0, beds_num.length()-1);
+		if(beds_num.length() == dates.size())
 			results.add(beds_num);
-		}
 		else
 			for(Bed bed : dates.get(index).getBeds())
 				if(bed.isAvailable())
-				{
-					String tmp = beds_num;
-					if(beds_num != "") tmp += ",";
-					GetBedsCombinations(dates, index+1, tmp+bed.getRoomNum()+"-"+bed.getNum(), results);
-				}
-	}
-	
-	static void SetBedAvailability(String bed, ArrayList<Date> dates, boolean isAvailable)
-	{
-		String[] beds = bed.split(",");
-		
-		// test
-		if(beds.length != dates.size())
-		{
-			System.out.println("Error! 1");
-			return;
-		}
-		
-		for(int i=0;i<dates.size();i++)
-		{
-			Bed b = GetBedByNumber(dates.get(i), Integer.parseInt(beds[i]));
-			
-			// test
-			if(b == null) {
-				System.out.println("Error! 2");
-				return;
-			}
-			
-			b.setAvailable(isAvailable);
-		}
-	}
-	
-	static Bed GetBedByNumber(Date date, int number)
-	{
-		for(Bed bed : date.getBeds())
-			if(bed.getNum() == number)
-				return bed;
-		return null;
+					GetBedsCombinations(dates, index+1, beds_num+bed.getNum(), results);
 	}
 	
 	// Commands excution
@@ -258,7 +151,7 @@ public class Main {
 				break;
 			case "change":
 				if(TestUserChangeArgs(args)) {
-					 ChangeCustomer(args);
+					ChangeCustomer(args);
 				}
 				break;
 			case "view":
@@ -310,7 +203,7 @@ public class Main {
 		}
 		else
 		{
-			Search("",20000000,30000000,2);
+		
 		}
 	}
 	
@@ -502,6 +395,7 @@ public class Main {
 		return true;
 	}
 	
+		
 	//scanning the args array to add customer's information
 	public static void AddNewCustomer(String[] args)
 	{
@@ -527,7 +421,7 @@ public class Main {
 		customers.add(newCustomer);
 		
 	}
-		
+	
 	public static void ChangeCustomer(String[] args)
 	{
 		String userID = args[3];		
@@ -564,9 +458,6 @@ public class Main {
 				System.out.println("Name: " + tempCustomer.getFirstName() + " " + tempCustomer.getLastName());
 				System.out.println("Email: " + tempCustomer.getEmail());				
 					
-	}
-	public static void ReadXML() {
-		XMLParser.parser();
 	}
 
 }
