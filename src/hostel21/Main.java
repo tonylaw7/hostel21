@@ -12,8 +12,7 @@ public class Main {
 	static ArrayList<Bed> bedResults = new ArrayList<Bed>();
 	
 	// Main program
-	public static void main(String[] args) {
-		ReadXML();
+	public static void main(String[] args) {		
 		LoadData();
 		RunApp();
 		SaveData();
@@ -21,7 +20,9 @@ public class Main {
 	}
 	
 	// Load/Save data
-	private static void LoadData() { }
+	private static void LoadData() {
+		XMLParser.parser();
+	}
 	private static void SaveData() { }
 	
 	// Main app method
@@ -564,9 +565,6 @@ public class Main {
 				System.out.println("Name: " + tempCustomer.getFirstName() + " " + tempCustomer.getLastName());
 				System.out.println("Email: " + tempCustomer.getEmail());				
 					
-	}
-	public static void ReadXML() {
-		XMLParser.parser();
 	}
 
 }
