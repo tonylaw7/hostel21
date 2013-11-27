@@ -9,12 +9,12 @@ public class Date {
 	private ArrayList<Bed> beds;
 	
 	public Date() {
-		this.beds = new ArrayList<Bed>();
+        this.beds = new ArrayList<Bed>();
 	}
 	
 	public Date(long date) {
-		this.date = date;
-		this.beds = new ArrayList<Bed>();
+        this.date = date;
+        this.beds = new ArrayList<Bed>();
 	}
 	
 	public long getDate() {
@@ -38,4 +38,20 @@ public class Date {
 		return null;
 	}
 
+	public String GetBedAvailabilitiesWithPrices()
+	{
+		int c=0;
+		float min = 1000, max = 0;
+		for(Bed bed : beds)
+			if(bed.isAvailable())
+			{
+				c++;
+				if(bed.getPrice() > max) max = bed.getPrice();
+				if(bed.getPrice() < min) min = bed.getPrice();
+			}
+		if(c!=0)
+			return date + " to " + (date+1) + ": " + c + " beds avaialable between " + min + " and " + max;
+		else
+			return date + " to " + (date+1) + ": " + "No available beds on this date";
+	}
 }

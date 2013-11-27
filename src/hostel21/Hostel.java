@@ -1,43 +1,55 @@
 package hostel21;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 public class Hostel {
 
-	private static int id;
+	private int id;
 	private String name;
 	private Address address;
 	private Contact contact;
 	
-	//private int numOfRooms;
+	private int numOfRooms;
 	private ArrayList<Date> dates = new ArrayList<Date>();
 	
 	//need verifications on what date format to be used
 	private String checkInTime;
 	private String checkOutTime;
 	
+	private String cancellation_deadline;
+    private String cancellation_penalty;
+	
 	private boolean isSmockingAllowed;
 	private boolean isAlcoholAllowed;
-	private String cancellation_deadline;
-	private String cancellation_penalty;
 	
-	public Hostel() {		
+	public Hostel() {
+		// TODO Auto-generated constructor stub
 	}
+	
+	/*public Hostel(int id,Address address, int numOfRooms){
+		this.id = id;
+		this.address = address;
+		this.numOfRooms = numOfRooms;
+		
+	}*/
 	
 	public Hostel(String name, Address address, Contact contact, String checkIn, String checkOut,
-			boolean isSmoking, boolean isAlcohol, String cancelDeadline, String cancelPenalty){
-		id++;
-		this.name = name;
-		this.address = address;
-		this.contact = contact;
-		this.checkInTime = checkIn;
-		this.checkOutTime = checkOut;
-		this.isAlcoholAllowed = isSmoking;
-		this.isAlcoholAllowed = isAlcohol;
-		this.cancellation_deadline = cancelDeadline;
-		this.cancellation_penalty = cancelPenalty;			
-		
+            boolean isSmoking, boolean isAlcohol, String cancelDeadline, String cancelPenalty)
+	{
+	    id++;
+	    this.name = name;
+	    this.address = address;
+	    this.contact = contact;
+	    this.checkInTime = checkIn;
+	    this.checkOutTime = checkOut;
+	    this.isAlcoholAllowed = isSmoking;
+	    this.isAlcoholAllowed = isAlcohol;
+	    this.cancellation_deadline = cancelDeadline;
+	    this.cancellation_penalty = cancelPenalty;                        
+	    
 	}
+	
 	public Address getAddress() {
 		return address;
 	}
@@ -46,6 +58,15 @@ public class Hostel {
 	}
 	public int getId() {
 		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getNumOfRooms() {
+		return numOfRooms;
+	}
+	public void setNumOfRooms(int numOfRooms) {
+		this.numOfRooms = numOfRooms;
 	}
 
 	public String getName() {
@@ -100,21 +121,13 @@ public class Hostel {
 				hostel_dates.add(d);
 		return hostel_dates;
 	}
-
-	public String getCancellation_deadline() {
-		return cancellation_deadline;
-	}
-
-	public void setCancellation_deadline(String cancellation_deadline) {
-		this.cancellation_deadline = cancellation_deadline;
-	}
-
-	public String getCancellation_penalty() {
-		return cancellation_penalty;
-	}
-
-	public void setCancellation_penalty(String cancellation_penalty) {
-		this.cancellation_penalty = cancellation_penalty;
+	
+	public Date GetHostelDate(long date)
+	{
+		for(Date d : dates)
+			if(d.getDate() == date)
+				return d;
+		return null;
 	}
 	
 }

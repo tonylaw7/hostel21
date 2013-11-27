@@ -11,9 +11,9 @@ public class SearchResult {
 	{
 		hostelName = name;
 		bedsCandidates = new ArrayList<ArrayList<Date>>(beds);
-		for(ArrayList<Date> list : bedsCandidates)
+		for(ArrayList<Date> l : bedsCandidates)
 		{
-			list = new ArrayList<Date>(dates);
+			l = new ArrayList<Date>(dates);
 		}
 	}
 	

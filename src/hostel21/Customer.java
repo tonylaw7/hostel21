@@ -1,10 +1,14 @@
 package hostel21;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 
 public class Customer {
 	
-	private static int id;
+	private static int count = 0;
+	public static ArrayList<Customer> customers = new ArrayList<Customer>();
+	
+	private int id;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -27,8 +31,7 @@ public class Customer {
 		this.setExpirationDate(expirationDate);
 		this.setSecurityCode(securityCode);
 		this.phone = phone;
-		
-		id++;
+		this.id = ++count;
 	}
 	
 	public int getId() {
@@ -103,4 +106,12 @@ public class Customer {
 		this.securityCode = securityCode;
 	}
 	
+	public static Customer GetCustomer(String userID ) {
+        for(Customer c : customers) {
+                if (c.getId() == Integer.parseInt(userID)) {
+                        return c;
+                }                        
+        }
+        return null;
+	}
 }

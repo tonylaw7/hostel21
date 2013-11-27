@@ -19,7 +19,7 @@ public class Search {
 	{
 		String line = "search_id:";
 		line += id;
-		line += ", " + sr.GetTotalPrice();
+		line += ", $" + sr.GetTotalPrice();
 		line += ", rooms " + GetRoomNums(sr);
 		System.out.println(line);
 	}
@@ -54,6 +54,7 @@ public class Search {
 		for(int i=0; i<bedArray.length; i++)
 		{
 			String[] dateArray = bedArray[i].split(",");
+			ArrayList<Date> al = new ArrayList<Date>();
 			for(int j=0; j<dateArray.length; j++)
 			{
 				String[] info = dateArray[j].split("-");
@@ -61,18 +62,20 @@ public class Search {
 				int bedNum = Integer.parseInt(info[1]);
 				Bed bed = dates.get(j).GetBedByNum(roomNum, bedNum);
 				float price = bed.getPrice();
-				if(sr.GetDistinctRoomNums().contains(roomNum))
+				if(!sr.GetDistinctRoomNums().contains(roomNum))
 					sr.GetDistinctRoomNums().add(roomNum);
 				
-				sr.GetBedsCandidates().get(i).get(j).setDate(dates.get(j).getDate());
 				ArrayList<Bed> tmpBed = new ArrayList<Bed>(1);
 				tmpBed.add(new Bed(bedNum, roomNum, price, true));
-				sr.GetBedsCandidates().get(i).get(j).setBeds(tmpBed);
+				Date d = new Date(dates.get(j).getDate());
+				d.setBeds(tmpBed);
+				al.add(d);
+				
 				totalPrice += price;
 			}
+			sr.GetBedsCandidates().add(al);
 		}
 		sr.SetTotalPrice(totalPrice);
 		return sr;
 	}
-	
 }

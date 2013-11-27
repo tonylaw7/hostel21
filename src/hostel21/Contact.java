@@ -37,5 +37,4 @@ public class Contact {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
-
 }

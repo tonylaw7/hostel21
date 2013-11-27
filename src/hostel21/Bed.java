@@ -42,16 +42,4 @@ public class Bed {
 	public void setAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	
-	//public DateFormat getDate() {
-	//	return date;
-	//}
-	//public void setDate(DateFormat date) {
-	//	this.date = date;
-	//}
-	
-	
-	
-	
-	
 }
